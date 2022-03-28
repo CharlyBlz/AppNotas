@@ -34,20 +34,51 @@ yargs.command(
     }
     }
 )
-//Crear comando get
+//Crear comando read
 yargs.command(
     {
-    command: 'get',
+    command: 'listNotes',
     describe: 'Get all notes',
     builder:{ // Constructor, recibe dos argumentos: title y body,
 
     },
-    handler(argv){//Función que maneja el comando
+    handler(){//Función que maneja el comando
             console.log("Contenido de archivo JSON")
-            notes.getNotes()
+            //notes.getNotes()
+            notes.listNotes()
     }
     }
 )
+//Crear comando remove
+yargs.command({
+    command:"remove",
+    describe:"Remove a note",
+    builder:{
+        title:{
+            describe: "Note title",
+            demandOption:true,
+            type:"String"
+        }
+    },
+    // argv: le pasamos los argumentos por consola, en este caso: el título de la nota a borrar
+    handler(argv){
+        notes.removeNote(argv.title)
+    }
+})
+yargs.command({
+    command: "read one note",
+    describe: "read one note",
+    builder:{
+        title:{
+            describe: "Note title",
+            demandOption:true,
+            type:"String"
+        }
+    },
+    handler(argv){
+        notes.readOneNote(argv.title)
+    }
+})
 yargs.parse()
 /*
 //const getNotes = require("./herramientas.js")

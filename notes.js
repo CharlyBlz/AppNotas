@@ -1,4 +1,5 @@
 const fs = require('fs')
+const { title } = require('process')
 const addNote = function(title,body){
     console.log("El título de la nota:", title)
     console.log("El cuerpo de la nota:", body)
@@ -19,13 +20,26 @@ const addNote = function(title,body){
 }
 const getNotes = function(){
     try{
+    // La constante "readNotes" es un archivo en formato JSON    
     const readNotes = fs.readFileSync("notes.json")
+    /*  El método "parse" del objeto "JSON" toma la cadena JSON 
+    y la transforma en un objeto de JavaScript, es decir, un objeto
+    que podamos manipular en JS */
     const notes = JSON.parse(readNotes)
     console.log(notes)
     }catch(err){
         console.log(err)
     }
 }
+
+const listNotes = function(){ //Función que itera sobre las notas y las imprime
+    const notes = loadNotes()
+    notes.forEach((note) => { //Función flecha
+        console.log("Título de la nota: ",note.title)
+        console.log("Cuerpo de la nota: ",note.body)
+    })
+}
+
 const saveNotes = function(notes){
     const dataJSON = JSON.stringify(notes)
     fs.writeFileSync("notes.json", dataJSON)
@@ -33,15 +47,45 @@ const saveNotes = function(notes){
 const loadNotes= function() {
     try{
         const dataBuffer = fs.readFileSync("notes.json")
-        const dataJSON = dataBuffer.toString()
+        // Buena práctica: pasar el contenido a un buffer temporal
+        const dataJSON = dataBuffer.toString() 
         return JSON.parse(dataJSON) //devuelve lista llena
     } catch(e){
         return[] //devuelve lista vacía
     }
 }
+const removeNote = function(title){
+    const notes = loadNotes()
+/* Leemos el archivo JSON (archivo de texto)
+Eliminamos la nota
+Sobreescribimos la lista (archivo JSON)
+JSON: archivo para transacciones en la red (internet)
+*/
+    // console.log(notes)
+    const notesToKeep = notes.filter((note)=>note.title != title)
+    if(notes.length > notesToKeep.length){
+        console.log("Note removed!")
+        saveNotes(notesToKeep)
+    }else{
+        console.log("Note not found!")
+    }
+}
+const readOneNote = function(title){
+    const notes = loadNotes()
+    const note = notes.find((note)=>note.title === title)
+    if(note){
+        console.log("Nota encontrada")
+        console.log(note.title, ":",note.body)
+    }else{
+        console.log("Nota no encontrada")
+    }
+}
 module.exports = {
     addNote:addNote,
-    getNotes:getNotes
+    getNotes:getNotes,
+    listNotes:listNotes,
+    removeNote: removeNote,
+    readOneNote:readOneNote
 }
 
 
