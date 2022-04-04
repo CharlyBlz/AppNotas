@@ -80,12 +80,35 @@ const readOneNote = function(title){
         console.log("Nota no encontrada")
     }
 }
+
+const modifyNote = function(title, ntitle, nbody){
+    // Obtenemos el archivo JSON que contiene la lista de notas
+    const notes = loadNotes()
+    // Buscamos el índice de la nota que queremos modificar mediante su "título"
+    const pos = notes.findIndex((note)=>note.title === title)
+    console.log(pos)
+    // Modificamos el título de la nota y/o su cuerpo
+    // if(!pos)... esto estaba dando error
+    if(pos!==null){
+        notes.splice(pos,1, {
+            title:ntitle,
+            body:nbody}
+            )
+        // Reescribimos el archivo JSON con la(s) nota(s) modificada(s)
+        saveNotes(notes)
+        console.log("Nota modificada")
+    } else{
+        console.log("Nota no existe")
+    }
+
+}
 module.exports = {
     addNote:addNote,
     getNotes:getNotes,
     listNotes:listNotes,
     removeNote: removeNote,
-    readOneNote:readOneNote
+    readOneNote:readOneNote,
+    modifyNote:modifyNote
 }
 
 

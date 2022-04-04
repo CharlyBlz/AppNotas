@@ -29,7 +29,7 @@ yargs.command(
         }
     },
     handler(argv){//Función que maneja el comando
-            console.log("Hola")
+            //console.log("Hola")
             notes.addNote(argv.title,argv.body)
     }
     }
@@ -65,6 +65,7 @@ yargs.command({
         notes.removeNote(argv.title)
     }
 })
+//Crear comando read one note
 yargs.command({
     command: "read one note",
     describe: "read one note",
@@ -77,6 +78,31 @@ yargs.command({
     },
     handler(argv){
         notes.readOneNote(argv.title)
+    }
+})
+//Crear comando modify note
+yargs.command({
+    command: "modify note",
+    describe: "modifies one note at a time",
+    builder: {
+        title :{
+            describe: "Note title to modify",
+            demandOption: true,
+            type:'string'
+        },
+        ntitle :{
+            describe: "New note title",
+            demandOption: true,
+            type:'String'
+        },
+        nbody:{
+            describe: "New note body",
+            demandOption: true,
+            type: 'String'
+        }
+    },
+    handler(argv){
+            notes.modifyNote(argv.title,argv.ntitle, argv.nbody)
     }
 })
 yargs.parse()
